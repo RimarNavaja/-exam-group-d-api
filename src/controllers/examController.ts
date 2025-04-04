@@ -3,6 +3,31 @@ import { AppDataSource } from "../data-source";
 import { Exam } from "../entity/Exam";
 
 const examRepository = AppDataSource.getRepository(Exam);
+// Implemented by Member Pardillo
+export const createExam = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { title, description, durationMinutes } = req.body;
+
+    // Input validation
+    if (!title || !description) {
+      res.status(400).json({ message: "Title and description are required" });
+      return;
+    }
+
+    const exam = new Exam();
+    exam.title = title;
+    exam.description = description;
+    exam.durationMinutes = durationMinutes || 60;
+
+    await examRepository.save(exam);
+    res.status(201).json(exam);
+  } catch (error) {
+    res.status(500).json({ message: "Error creating exam", error });
+  }
+};
 
 // Implemented by Member Arcenel
 export const getExams = async (req: Request, res: Response): Promise<void> => {
