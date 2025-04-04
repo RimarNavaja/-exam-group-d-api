@@ -59,3 +59,41 @@ export const getExams = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: "Error fetching exams", error });
   }
 };
+
+// Implemented by Member Labe
+export const updateExam = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const id = parseInt(req.params.id);
+    const { title, description, durationMinutes } = req.body;
+
+    // Input validation
+    if (!title && !description && !durationMinutes) {
+      res
+        .status(400)
+        .json({ message: "At least one field to update is required" });
+      return;
+    }
+
+    // In a real implementation, find and update in database
+    // const exam = await examRepository.findOneBy({ id });
+    // if (!exam) {
+    //   res.status(404).json({ message: "Exam not found" });
+    //   return;
+    // }
+
+    // Update mock exam
+    const exam = {
+      id,
+      title: title || "Updated Exam",
+      description: description || "Updated Description",
+      durationMinutes: durationMinutes || 60,
+    };
+
+    res.status(200).json(exam);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating exam", error });
+  }
+};
