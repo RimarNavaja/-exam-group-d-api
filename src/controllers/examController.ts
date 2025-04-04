@@ -3,31 +3,6 @@ import { AppDataSource } from "../data-source";
 import { Exam } from "../entity/Exam";
 
 const examRepository = AppDataSource.getRepository(Exam);
-// Implemented by Member Pardillo
-export const createExam = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const { title, description, durationMinutes } = req.body;
-
-    // Input validation
-    if (!title || !description) {
-      res.status(400).json({ message: "Title and description are required" });
-      return;
-    }
-
-    const exam = new Exam();
-    exam.title = title;
-    exam.description = description;
-    exam.durationMinutes = durationMinutes || 60;
-
-    await examRepository.save(exam);
-    res.status(201).json(exam);
-  } catch (error) {
-    res.status(500).json({ message: "Error creating exam", error });
-  }
-};
 
 // Implemented by Member Arcenel
 export const getExams = async (req: Request, res: Response): Promise<void> => {
@@ -60,6 +35,33 @@ export const getExams = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// Implemented by Member Pardillo
+export const createExam = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { title, description, durationMinutes } = req.body;
+
+    // Input validation
+    if (!title || !description) {
+      res.status(400).json({ message: "Title and description are required" });
+      return;
+    }
+
+    const exam = new Exam();
+    exam.title = title;
+    exam.description = description;
+    exam.durationMinutes = durationMinutes || 60;
+
+    await examRepository.save(exam);
+
+    res.status(201).json(exam);
+  } catch (error) {
+    res.status(500).json({ message: "Error creating exam", error });
+  }
+};
+
 // Implemented by Member Labe
 export const updateExam = async (
   req: Request,
@@ -77,7 +79,6 @@ export const updateExam = async (
       return;
     }
 
-    // In a real implementation, find and update in database
     // const exam = await examRepository.findOneBy({ id });
     // if (!exam) {
     //   res.status(404).json({ message: "Exam not found" });
